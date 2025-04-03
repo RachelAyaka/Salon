@@ -4,20 +4,19 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
   Box,
-  Button,
   InputBase,
 } from '@mui/material'
 import { Search as SearchIcon, AccountCircle } from '@mui/icons-material'
 import ProfileInfo from '../Cards/ProfileInfo' // Assuming this component is modified accordingly
 import { styled } from '@mui/system'
 
-const Navbar = () => {
+const Navbar = ({userInfo}) => {
   const [searchQuery, setSearchQuery] = useState('')
   const navigate = useNavigate()
 
   const onLogout = () => {
+    localStorage.clear()
     navigate('/login')
   }
 
@@ -89,7 +88,7 @@ const Navbar = () => {
 
         {/* Right Section: Profile and Logout */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <ProfileInfo onLogout={onLogout} />
+          <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
         </Box>
       </Toolbar>
     </AppBar>

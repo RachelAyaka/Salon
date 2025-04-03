@@ -44,12 +44,16 @@
 // }
 
 // export default Home
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { MdAdd } from 'react-icons/md'
-import { Box, Button, Grid, Modal } from '@mui/material'
-import NoteCard from '../../components/Cards/NoteCard'
+
+import { Box, Button, Card, Grid, Modal, Typography } from '@mui/material'
+
 import Navbar from '../../components/Navbar/Navbar'
 import AddEditNotes from './AddEditNotes'
+import axiosInstance from '../../utils/axiosInstance'
+import NoteCard from '../../components/Cards/NoteCard'
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -57,6 +61,48 @@ const Home = () => {
     type: 'add',
     data: null,
   })
+  const [allNotes, setAllNotes] = useState([])
+  const [userInfo, setUserInfo] = useState(null)
+
+  const navigate = useNavigate()
+
+  const handleEdit = (noteDetails) => {
+    setOpenAddEditModal({isShown: true, data: noteDetails, type: "edit"})
+  }
+
+  // get user info
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/get-user")
+      if (response.data && response.data.user) {
+        setUserInfo(response.data.user)
+      }
+    } catch (error) {
+      if (Error.response.status === 401) {
+        localStorage.clear()
+        navigate('/login')
+      }
+    }
+  }
+
+  //get all notes
+  const getAllNotes = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-notes")
+
+      if (response.data && response.data.notes) {
+        setAllNotes(response.data.notes)
+      }
+    } catch (error) {
+      console.log("An unexpected error occured. Please try again.")
+    }
+  }
+
+  useEffect (() => {
+    getAllNotes()
+    getUserInfo()
+    return () => {}
+  }, [])
 
   const handleOpenModal = (type, data = null) => {
     setOpenAddEditModal({ isShown: true, type, data })
@@ -68,28 +114,30 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar userInfo={userInfo}/>
       <Box sx={{ padding: 3 }}>
-        <Grid container spacing={4} size={{marginTop: 4 }}>
+        <Grid container spacing={4} sx={{marginTop: 4 }}>
           {/* Example NoteCard */}
-          <Grid size={{xs:12, sm:6, md:4}}>
-            <NoteCard
-              title="Meeting on 4/7"
-              date="4/3 2024"
-              content="Meeting on 4/7"
-              tags="Meeting"
-              isPinned={true}
-              onEdit={() =>
-                handleOpenModal('edit', {
-                  title: 'Meeting on 4/7',
-                  date: '4/3 2024',
-                  content: 'Meeting on 4/7',
-                })
-              }
-              onDelete={() => {}}
-              onPinNote={() => {}}
-            />
-          </Grid>
+          {allNotes.length === 0 ? (
+            <Typography variant='h6'>No notes available</Typography>
+          ): (
+            allNotes.map((item) => (
+            <Grid size={{xs:12, sm:6, md:4}} key={item._id}>
+              <NoteCard
+                key={item._id}
+                title={item.title}
+                date={item.createdOn}
+                content={item.content}
+                tags={item.tags}
+                isPinned={item.isPinned}
+                onEdit={() =>handleEdit(item)}
+                onDelete={() => {}}
+                onPinNote={() => {}}
+              />
+            </Grid>
+          ))
+          )}
+          
         </Grid>
 
         {/* Floating Add Button */}
@@ -132,7 +180,10 @@ const Home = () => {
             <AddEditNotes
               type={openAddEditModal.type}
               noteData={openAddEditModal.data}
-              onClose={handleCloseModal}
+              onClose={() => {
+                setOpenAddEditModal({isShown: false, type: "add", data: null})
+              }}
+              getAllNotes={getAllNotes}
             />
           </Box>
         </Modal>

@@ -24,7 +24,7 @@
 import { getInitials } from '../../utils/helper'
 import { Avatar, Button, Typography, Box } from '@mui/material'
 
-const ProfileInfo = ({ onLogout }) => {
+const ProfileInfo = ({ userInfo, onLogout }) => {
   return (
     <Box display="flex" alignItems="center" gap={2}>
       {/* Avatar */}
@@ -37,12 +37,12 @@ const ProfileInfo = ({ onLogout }) => {
           fontWeight: 'medium',
         }}
       >
-        {getInitials('Rachel Lin')}
+        {getInitials(userInfo?.fullName)}
       </Avatar>
 
       <Box>
         <Typography variant="body2" color="primary" fontWeight="medium">
-          Rachel Lin
+          {userInfo?.fullName}
         </Typography>
         <Button
           variant="text"

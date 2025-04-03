@@ -44,7 +44,7 @@
 // export default NoteCard
 import { MdOutlinePushPin, MdCreate, MdDelete } from 'react-icons/md'
 import { Card, CardContent, Typography, IconButton, Box, Tooltip, Chip } from '@mui/material'
-import { styled } from '@mui/system'
+import moment from 'moment'
 
 const NoteCard = ({
   title,
@@ -75,7 +75,7 @@ const NoteCard = ({
               {title}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {date}
+              {moment(date).format('Do MMM YYYY ')}
             </Typography>
           </Box>
 
@@ -99,9 +99,10 @@ const NoteCard = ({
         {/* Footer Section */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 2 }}>
             <Box sx={{ display: 'flex', gap: 1 }}>
-                {tags.split(',').map((tag, index) => (
+                {tags.length > 0 ?
+                tags.map((tag, index) => (
                 <Chip key={index} label={tag} color="primary" size="small" />
-                ))}
+                )): null}
             </Box>
 
           {/* Edit and Delete Buttons */}
