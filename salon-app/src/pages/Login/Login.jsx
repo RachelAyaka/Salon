@@ -92,22 +92,26 @@ const Login = () => {
 
     // Login API Call
     try {
-      const response = await axiosInstance.post("/login", {
+      const response = await axiosInstance.post('/login', {
         email: email,
         password: password,
       })
 
       //handle successful login response
       if (response.data && response.data.accessToken) {
-        localStorage.setItem("token", response.data.accessToken)
-        navigate("/dashboard")
+        localStorage.setItem('token', response.data.accessToken)
+        navigate('/dashboard')
       }
     } catch {
       //handle login error
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         setError(error.response.data.message)
       } else {
-        setError("An unexcepted error occured. Please try again.")
+        setError('An unexcepted error occured. Please try again.')
       }
     }
   }

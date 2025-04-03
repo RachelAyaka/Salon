@@ -6,12 +6,13 @@ import {
   IconButton,
   Box,
   InputBase,
+  Typography,
+  Button,
 } from '@mui/material'
 import { Search as SearchIcon, AccountCircle } from '@mui/icons-material'
-import ProfileInfo from '../Cards/ProfileInfo' // Assuming this component is modified accordingly
-import { styled } from '@mui/system'
+import ProfileInfo from '../Cards/ProfileInfo'
 
-const Navbar = ({userInfo}) => {
+const Navbar = ({ userInfo }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const navigate = useNavigate()
 
@@ -45,7 +46,7 @@ const Navbar = ({userInfo}) => {
         }}
       >
         {/* Left Section: Search Bar */}
-        <Box
+        {/* <Box
           sx={{
             flexGrow: 1,
             display: 'flex',
@@ -84,6 +85,25 @@ const Navbar = ({userInfo}) => {
               />
             </IconButton>
           )}
+        </Box> */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: 'flex',
+            alignItems: 'center',
+            maxWidth: '400px',
+            overflow: 'hidden',
+          }}
+        >
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Vite App
+          </Typography>
+          <Button component={Link} to="/" color="primary">
+            Home
+          </Button>
+          <Button component={Link} to="/dashboard" color="primary">
+            Dashboard
+          </Button>
         </Box>
 
         {/* Right Section: Profile and Logout */}

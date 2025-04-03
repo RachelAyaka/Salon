@@ -3,6 +3,12 @@ export const validateEmail = (email) => {
   return regex.test(email)
 }
 
+export const validatePhone = (phone) => {
+  console.log(phone)
+  const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
+  return regex.test(phone)
+}
+
 export const getInitials = (name) => {
   if (!name) return ''
 

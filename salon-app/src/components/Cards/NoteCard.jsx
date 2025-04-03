@@ -43,7 +43,15 @@
 
 // export default NoteCard
 import { MdOutlinePushPin, MdCreate, MdDelete } from 'react-icons/md'
-import { Card, CardContent, Typography, IconButton, Box, Tooltip, Chip } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  Typography,
+  IconButton,
+  Box,
+  Tooltip,
+  Chip,
+} from '@mui/material'
 import moment from 'moment'
 
 const NoteCard = ({
@@ -69,9 +77,18 @@ const NoteCard = ({
     >
       <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
         {/* Header Section */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+          }}
+        >
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 'medium', color: 'text.primary' }}>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 'medium', color: 'text.primary' }}
+            >
               {title}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -92,18 +109,29 @@ const NoteCard = ({
         </Box>
 
         {/* Content Preview */}
-        <Typography variant="body2" sx={{ color: 'text.secondary', marginTop: 1 }}>
+        <Typography
+          variant="body2"
+          sx={{ color: 'text.secondary', marginTop: 1 }}
+        >
           {content?.slice(0, 60)}...
         </Typography>
 
         {/* Footer Section */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 2 }}>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-                {tags.length > 0 ?
-                tags.map((tag, index) => (
-                <Chip key={index} label={tag} color="primary" size="small" />
-                )): null}
-            </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 2,
+          }}
+        >
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {tags.length > 0
+              ? tags.map((tag, index) => (
+                  <Chip key={index} label={tag} color="primary" size="small" />
+                ))
+              : null}
+          </Box>
 
           {/* Edit and Delete Buttons */}
           <Box sx={{ display: 'flex', gap: 2 }}>
