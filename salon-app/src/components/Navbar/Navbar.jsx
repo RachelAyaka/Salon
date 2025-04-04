@@ -101,8 +101,8 @@ const Navbar = ({ userInfo }) => {
           <Button component={Link} to="/" color="primary">
             Home
           </Button>
-          <Button component={Link} to="/dashboard" color="primary">
-            Dashboard
+          <Button component={Link} to="/appointment" color="primary">
+            Appointment
           </Button>
         </Box>
 
