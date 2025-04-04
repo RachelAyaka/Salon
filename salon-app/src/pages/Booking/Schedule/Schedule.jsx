@@ -35,6 +35,7 @@ const Schedule = () => {
   const [loading, setLoading] = useState(false)
   const [totalPrice, setTotalPrice] = useState(0)
   const [totalDuration, setTotalDuration] = useState(0)
+  const [note, setNote] = useState("")
 
   useEffect(() => {
     if (selectedServices.length === 0) {
@@ -105,8 +106,23 @@ const Schedule = () => {
       selectedServices.filter((service) => service._id !== serviceId),
     )
   }
-  const handleSubmit = () => {
-    // Handle appointment submission
+  const handleBookAppointment = async () => {
+    let dateString = selectedDate.toLocaleDateString('en-CA')
+
+    try {
+        const response = await axiosInstance.post('/create-appointment', {
+            date:dateString, time:selectedTime, services:selectedServices, note
+        })
+
+        if (response.data && response.data.appointment) {
+            console.log(response.data.appointmnet)
+        }
+        navigate('/appointment')
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.message) {
+            setError(error.response.data.message)
+        }
+    } 
   }
 
   return (
@@ -261,23 +277,25 @@ const Schedule = () => {
           }}
         >
           <TextField
-            label="Notes (optional)"
-            multiline
+            label="Note (optional)"
+            value={note}
             rows={4}
             fullWidth
             variant="outlined"
             sx={{ maxWidth: '500px', width: '100%' }}
+            onChange={({ target }) => setNote(target.value)}
           />
           <Button
             variant="contained"
             color="primary"
             size="large"
-            onClick={handleSubmit}
+            onClick={handleBookAppointment}
             sx={{
               maxWidth: '200px',
               width: '100%',
               padding: '10px 0',
               fontSize: '1rem',
+              textTransform: 'none'
             }}
           >
             Book Appointment
