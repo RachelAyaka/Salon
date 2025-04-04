@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Box,
   Button,
@@ -8,7 +9,6 @@ import {
   FormControlLabel,
   Grid,
   IconButton,
-  Link,
   Modal,
   Paper,
   Tooltip,
@@ -21,6 +21,7 @@ import axiosInstance from '../../utils/axiosInstance'
 import AddEditService from './AddEditService'
 
 const Booking = () => {
+  const navigate = useNavigate()
   const [userInfo, setUserInfo] = useState(null)
   const [services, setServices] = useState([])
   const [loading, setLoading] = useState(true)
@@ -70,14 +71,20 @@ const Booking = () => {
     return () => {}
   }, [])
 
-  const handleServiceChange = (event, serviceId) => {
+  const handleServiceChange = (event, serviceId, service) => {
     if (event.target.checked) {
-      setSelectedServices((prevSelected) => [...prevSelected, serviceId])
+      setSelectedServices((prevSelected) => [...prevSelected, service])
     } else {
       setSelectedServices((prevSelected) =>
-        prevSelected.filter((id) => id !== serviceId),
+        prevSelected.filter((service) => service._id !== serviceId),
       )
     }
+  }
+
+  const handleContinueClick = () => {
+    navigate('/booking/schedule', {
+      state: { selectedServices },
+    })
   }
 
   if (loading) {
@@ -101,6 +108,8 @@ const Booking = () => {
 
   const isAdmin = userInfo && userInfo.email === 'rachellin117@gmail.com'
 
+  const dataToSend = { services: selectedServices }
+
   return (
     <>
       <Navbar userInfo={userInfo} />
@@ -111,7 +120,7 @@ const Booking = () => {
         <Typography variant="h6" align="center" gutterBottom>
           Choose a Service:
         </Typography>
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={2} justifyContent="left">
           {services.map((service) => (
             <Grid
               size={{ xs: 12, sm: 6, md: 4 }}
@@ -125,7 +134,7 @@ const Booking = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  flexGrow: 1, 
+                  flexGrow: 1,
                   position: 'relative',
                 }}
               >
@@ -141,8 +150,10 @@ const Booking = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={selectedServices.includes(service._id)}
-                        onChange={(e) => handleServiceChange(e, service._id)}
+                        checked={selectedServices.includes(service)}
+                        onChange={(e) =>
+                          handleServiceChange(e, service._id, service)
+                        }
                         color="primary"
                         name="serviceCheckbox"
                         id={`checkbox-${service._id}`}
@@ -152,8 +163,8 @@ const Booking = () => {
                       <Typography variant="h6">
                         {service.serviceName}
                       </Typography>
-                    } 
-                    sx={{ marginRight: 2 }} 
+                    }
+                    sx={{ marginRight: 2 }}
                   />
                 </Box>
 
@@ -180,17 +191,16 @@ const Booking = () => {
             </Grid>
           ))}
         </Grid>
-        <Link to={{ pathname: '/booking', state: { selectedServices } }}>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ marginTop: 2 }}
-            disabled={selectedServices.length === 0}
-          >
-            Continue
-          </Button>
-        </Link>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleContinueClick}
+          sx={{ marginTop: 2 }}
+          disabled={selectedServices.length === 0}
+        >
+          Continue
+        </Button>
 
         {isAdmin ? (
           <>
