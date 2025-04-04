@@ -13,6 +13,7 @@ const PasswordInput = ({ value, onChange, placeholder }) => {
   return (
     <TextField
       label={placeholder || 'Password'}
+      required
       variant="outlined"
       type={isShowPassword ? 'text' : 'password'}
       value={value}

@@ -61,33 +61,33 @@
 //   )
 // }
 // export default TagInput
-import React, { useState } from 'react';
-import { MdAdd, MdClose } from 'react-icons/md';
-import { TextField, Chip, IconButton, Box } from '@mui/material';
+import React, { useState } from 'react'
+import { MdAdd, MdClose } from 'react-icons/md'
+import { TextField, Chip, IconButton, Box } from '@mui/material'
 
 const TagInput = ({ tags, setTags }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState('')
 
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+    setInputValue(e.target.value)
+  }
 
   const addNewTag = () => {
     if (inputValue.trim() !== '') {
-      setTags([...tags, inputValue.trim()]);
-      setInputValue('');
+      setTags([...tags, inputValue.trim()])
+      setInputValue('')
     }
-  };
+  }
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      addNewTag();
+      addNewTag()
     }
-  };
+  }
 
   const handleRemoveTag = (tagToRemove) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
-  };
+    setTags(tags.filter((tag) => tag !== tagToRemove))
+  }
 
   return (
     <Box>
@@ -132,7 +132,7 @@ const TagInput = ({ tags, setTags }) => {
         </IconButton>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default TagInput;
+export default TagInput
