@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles'
 
 const theme = createTheme({
   palette: {
@@ -20,10 +20,10 @@ const theme = createTheme({
     },
     background: {
       default: '#F8F5F2', // Warm off-white for page background
-      paper: '#FFFFFF',   // Pure white for card backgrounds
+      paper: '#FFFFFF', // Pure white for card backgrounds
     },
     text: {
-      primary: '#4A4A4A',  // Softer than black for main text
+      primary: '#4A4A4A', // Softer than black for main text
       secondary: '#767676', // Medium gray for secondary text
     },
     error: {
@@ -77,6 +77,6 @@ const theme = createTheme({
       },
     },
   },
-});
+})
 
-export default theme;
+export default theme

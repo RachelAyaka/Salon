@@ -1,49 +1,57 @@
-import { useState } from 'react';
-import { Box, Button, Typography, Paper, IconButton, useMediaQuery, useTheme } from '@mui/material';
-import { ArrowBack, ArrowForward, CalendarToday } from '@mui/icons-material';
+import { useState } from 'react'
+import {
+  Box,
+  Button,
+  Typography,
+  Paper,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import { ArrowBack, ArrowForward, CalendarToday } from '@mui/icons-material'
 
 const Calendar = ({ selectedDate, setSelectedDate }) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   // Helper function to get days in a month
   const getDaysInMonth = (date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDay = firstDay.getDay(); // Day of the week for the 1st of the month
-    let days = [];
-    let day = 1;
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const firstDay = new Date(year, month, 1)
+    const lastDay = new Date(year, month + 1, 0)
+    const daysInMonth = lastDay.getDate()
+    const startingDay = firstDay.getDay() // Day of the week for the 1st of the month
+    let days = []
+    let day = 1
 
     // Fill in days of the previous month in the first row (if needed)
     for (let i = 0; i < startingDay; i++) {
-      days.push(null); // empty spaces before the start of the month
+      days.push(null) // empty spaces before the start of the month
     }
 
     // Add days of the current month
     for (let i = startingDay; i < 7; i++) {
-      days.push(day++);
+      days.push(day++)
     }
     for (let i = day; i <= daysInMonth; i++) {
-      days.push(i);
+      days.push(i)
     }
 
-    return days;
-  };
+    return days
+  }
 
   // Function to handle month change
   const changeMonth = (direction) => {
     setCurrentMonth((prev) => {
-      const newMonth = new Date(prev);
-      newMonth.setMonth(prev.getMonth() + direction);
-      return newMonth;
-    });
-  };
+      const newMonth = new Date(prev)
+      newMonth.setMonth(prev.getMonth() + direction)
+      return newMonth
+    })
+  }
 
-  const daysInMonth = getDaysInMonth(currentMonth);
+  const daysInMonth = getDaysInMonth(currentMonth)
 
   const handleDateClick = (day) => {
     if (day) {
@@ -51,19 +59,19 @@ const Calendar = ({ selectedDate, setSelectedDate }) => {
         currentMonth.getFullYear(),
         currentMonth.getMonth(),
         day,
-      );
+      )
 
       // Prevent selecting previous dates
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Set time to 00:00 to compare only the date
+      const today = new Date()
+      today.setHours(0, 0, 0, 0) // Set time to 00:00 to compare only the date
 
       if (newDate < today) {
-        return; // Don't allow selecting previous dates
+        return // Don't allow selecting previous dates
       }
 
-      setSelectedDate(newDate);
+      setSelectedDate(newDate)
     }
-  };
+  }
 
   const isDateSelected = (day) => {
     return (
@@ -71,12 +79,12 @@ const Calendar = ({ selectedDate, setSelectedDate }) => {
       day === selectedDate.getDate() &&
       currentMonth.getMonth() === selectedDate.getMonth() &&
       currentMonth.getFullYear() === selectedDate.getFullYear()
-    );
-  };
+    )
+  }
 
   const renderHeader = () => {
-    const monthName = currentMonth.toLocaleString('default', { month: 'long' });
-    const year = currentMonth.getFullYear();
+    const monthName = currentMonth.toLocaleString('default', { month: 'long' })
+    const year = currentMonth.getFullYear()
 
     return (
       <Box
@@ -90,52 +98,56 @@ const Calendar = ({ selectedDate, setSelectedDate }) => {
       >
         <IconButton
           onClick={() => changeMonth(-1)}
-          sx={{ 
+          sx={{
             color: 'primary.main',
             backgroundColor: 'grey.100',
             '&:hover': {
               backgroundColor: 'grey.200',
             },
           }}
-          size={isMobile ? "small" : "medium"}
+          size={isMobile ? 'small' : 'medium'}
         >
-          <ArrowBack fontSize={isMobile ? "small" : "medium"} />
+          <ArrowBack fontSize={isMobile ? 'small' : 'medium'} />
         </IconButton>
-        
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          gap: 1
-        }}>
-          <CalendarToday sx={{ color: 'primary.main', fontSize: isMobile ? 16 : 20 }} />
-          <Typography 
-            variant={isMobile ? "subtitle1" : "h6"} 
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <CalendarToday
+            sx={{ color: 'primary.main', fontSize: isMobile ? 16 : 20 }}
+          />
+          <Typography
+            variant={isMobile ? 'subtitle1' : 'h6'}
             sx={{ fontWeight: 600 }}
           >
             {monthName} {year}
           </Typography>
         </Box>
-        
+
         <IconButton
           onClick={() => changeMonth(1)}
-          sx={{ 
+          sx={{
             color: 'primary.main',
             backgroundColor: 'grey.100',
             '&:hover': {
               backgroundColor: 'grey.200',
             },
           }}
-          size={isMobile ? "small" : "medium"}
+          size={isMobile ? 'small' : 'medium'}
         >
-          <ArrowForward fontSize={isMobile ? "small" : "medium"} />
+          <ArrowForward fontSize={isMobile ? 'small' : 'medium'} />
         </IconButton>
       </Box>
-    );
-  };
+    )
+  }
 
   // Get today's date for comparison
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
 
   return (
     <Paper
@@ -149,11 +161,11 @@ const Calendar = ({ selectedDate, setSelectedDate }) => {
       }}
     >
       {renderHeader()}
-      
-      <Box 
-        sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(7, 1fr)', 
+
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(7, 1fr)',
           gap: { xs: 0.5, md: 1 },
           marginBottom: 1,
         }}
@@ -173,79 +185,87 @@ const Calendar = ({ selectedDate, setSelectedDate }) => {
           </Box>
         ))}
       </Box>
-      
-      <Box 
-        sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(7, 1fr)', 
+
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(7, 1fr)',
           gap: { xs: 0.5, md: 1 },
         }}
       >
         {daysInMonth.map((day, index) => {
           if (day === null) {
-            return <Box key={index} />;
+            return <Box key={index} />
           }
-          
+
           const currentDate = new Date(
             currentMonth.getFullYear(),
             currentMonth.getMonth(),
             day,
-          );
-          const isPastDate = currentDate < today;
-          const isToday = currentDate.getDate() === today.getDate() && 
-                          currentDate.getMonth() === today.getMonth() && 
-                          currentDate.getFullYear() === today.getFullYear();
-          const isSelected = isDateSelected(day);
+          )
+          const isPastDate = currentDate < today
+          const isToday =
+            currentDate.getDate() === today.getDate() &&
+            currentDate.getMonth() === today.getMonth() &&
+            currentDate.getFullYear() === today.getFullYear()
+          const isSelected = isDateSelected(day)
 
           return (
             <Button
               key={index}
               onClick={() => handleDateClick(day)}
               disabled={isPastDate}
-              variant={isSelected ? "contained" : "text"}
+              variant={isSelected ? 'contained' : 'text'}
               sx={{
                 minWidth: { xs: 30, md: 36 },
                 height: { xs: 30, md: 36 },
                 padding: 0,
                 borderRadius: '50%',
-                color: isPastDate ? 'grey.400' : 
-                       isSelected ? 'white' :
-                       isToday ? 'primary.main' : 'text.primary',
+                color: isPastDate
+                  ? 'grey.400'
+                  : isSelected
+                    ? 'white'
+                    : isToday
+                      ? 'primary.main'
+                      : 'text.primary',
                 border: isToday && !isSelected ? '1px solid' : 'none',
                 borderColor: 'primary.main',
                 fontWeight: isToday || isSelected ? 600 : 400,
                 position: 'relative',
                 '&:hover': {
-                  backgroundColor: isPastDate ? 'transparent' : 
-                                 isSelected ? 'primary.dark' : 'action.hover',
+                  backgroundColor: isPastDate
+                    ? 'transparent'
+                    : isSelected
+                      ? 'primary.dark'
+                      : 'action.hover',
                 },
                 fontSize: { xs: '12px', sm: '14px' },
               }}
             >
               {day}
             </Button>
-          );
+          )
         })}
       </Box>
-      
+
       {selectedDate && (
-        <Box 
-          sx={{ 
-            marginTop: 2, 
+        <Box
+          sx={{
+            marginTop: 2,
             padding: 1,
             backgroundColor: 'primary.light',
             borderRadius: 1,
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: 'primary.contrastText', 
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'primary.contrastText',
               fontWeight: 500,
-              fontSize: { xs: '12px', md: '14px' }
+              fontSize: { xs: '12px', md: '14px' },
             }}
           >
             Selected: {selectedDate.toLocaleDateString()}
@@ -253,7 +273,7 @@ const Calendar = ({ selectedDate, setSelectedDate }) => {
         </Box>
       )}
     </Paper>
-  );
-};
+  )
+}
 
-export default Calendar;
+export default Calendar

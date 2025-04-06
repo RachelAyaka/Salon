@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   TextField,
   Button,
@@ -12,45 +12,45 @@ import {
   Paper,
   useMediaQuery,
   useTheme,
-} from '@mui/material';
-import PasswordInput from '../../components/Input/PasswordInput';
-import axiosInstance from '../../utils/axiosInstance';
-import { validateEmail, validatePhone } from '../../utils/helper';
+} from '@mui/material'
+import PasswordInput from '../../components/Input/PasswordInput'
+import axiosInstance from '../../utils/axiosInstance'
+import { validateEmail, validatePhone } from '../../utils/helper'
 
 const SignUp = () => {
   const theme = useTheme()
-  const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [firstTime, setFirstTime] = useState(false);
-  const [minLen, setMinLen] = useState(0);
-  const [maxLen, setMaxLen] = useState(null);
-  const [shape, setShape] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate()
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [firstTime, setFirstTime] = useState(false)
+  const [minLen, setMinLen] = useState(0)
+  const [maxLen, setMaxLen] = useState(null)
+  const [shape, setShape] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const handleSignUp = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!name) {
-      setError('Please enter your name.');
-      return;
+      setError('Please enter your name.')
+      return
     }
     if (!validatePhone(phone)) {
-      setError('Invalid phone number. Please use the format XXX-XXX-XXXX.');
-      return;
+      setError('Invalid phone number. Please use the format XXX-XXX-XXXX.')
+      return
     }
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address.');
-      return;
+      setError('Please enter a valid email address.')
+      return
     }
     if (!password) {
-      setError('Please enter the password.');
-      return;
+      setError('Please enter the password.')
+      return
     }
-    setError('');
+    setError('')
 
     // SignUp API Call
     try {
@@ -63,16 +63,16 @@ const SignUp = () => {
         shape: shape,
         firstTime: firstTime,
         password: password,
-      });
+      })
 
       //handle successful registration response
       if (response.data && response.data.error) {
-        setError(response.data.message);
-        return;
+        setError(response.data.message)
+        return
       }
       if (response.data && response.data.accessToken) {
-        localStorage.setItem('token', response.data.accessToken);
-        navigate('/dashboard');
+        localStorage.setItem('token', response.data.accessToken)
+        navigate('/dashboard')
       }
     } catch (error) {
       //handle login error
@@ -81,24 +81,24 @@ const SignUp = () => {
         error.response.data &&
         error.response.data.message
       ) {
-        setError(error.response.data.message);
+        setError(error.response.data.message)
       } else {
-        setError('An unexpected error occurred. Please try again.');
+        setError('An unexpected error occurred. Please try again.')
       }
     }
-  };
+  }
 
   return (
-    <Container 
-      component="main" 
-      maxWidth="xs" 
+    <Container
+      component="main"
+      maxWidth="xs"
       sx={{
         display: 'flex',
         flexDirection: 'column',
         minHeight: '80vh',
         justifyContent: 'center',
         py: { xs: 3, sm: 4 },
-        px: { xs: 2, sm: 3 }
+        px: { xs: 2, sm: 3 },
       }}
     >
       <Paper
@@ -118,12 +118,12 @@ const SignUp = () => {
             alignItems: 'center',
           }}
         >
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              fontWeight: 600, 
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 600,
               marginBottom: 2,
-              fontSize: { xs: '1.75rem', sm: '2.125rem' }
+              fontSize: { xs: '1.75rem', sm: '2.125rem' },
             }}
           >
             Sign Up
@@ -140,10 +140,10 @@ const SignUp = () => {
             error={!!error && !name}
             helperText={!!error && !name ? error : ''}
             InputProps={{
-              style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+              style: { fontSize: isMobile ? '0.95rem' : '1rem' },
             }}
             InputLabelProps={{
-              style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+              style: { fontSize: isMobile ? '0.95rem' : '1rem' },
             }}
             sx={{ mb: 1 }}
           />
@@ -159,10 +159,10 @@ const SignUp = () => {
             error={!!error && !validatePhone(phone)}
             helperText={!!error && !validatePhone(phone) ? error : ''}
             InputProps={{
-              style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+              style: { fontSize: isMobile ? '0.95rem' : '1rem' },
             }}
             InputLabelProps={{
-              style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+              style: { fontSize: isMobile ? '0.95rem' : '1rem' },
             }}
             sx={{ mb: 1 }}
           />
@@ -178,21 +178,21 @@ const SignUp = () => {
             error={!!error && !validateEmail(email)}
             helperText={!!error && !validateEmail(email) ? error : ''}
             InputProps={{
-              style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+              style: { fontSize: isMobile ? '0.95rem' : '1rem' },
             }}
             InputLabelProps={{
-              style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+              style: { fontSize: isMobile ? '0.95rem' : '1rem' },
             }}
             sx={{ mb: 1 }}
           />
-          
-          <FormGroup 
-            sx={{ 
-              marginTop: 1, 
+
+          <FormGroup
+            sx={{
+              marginTop: 1,
               width: '100%',
               '& .MuiFormControlLabel-label': {
-                fontSize: isMobile ? '0.9rem' : '1rem'
-              }
+                fontSize: isMobile ? '0.9rem' : '1rem',
+              },
             }}
           >
             <FormControlLabel
@@ -208,7 +208,7 @@ const SignUp = () => {
               label="First time getting lash extension?"
             />
           </FormGroup>
-          
+
           {!firstTime ? (
             <>
               <TextField
@@ -221,10 +221,10 @@ const SignUp = () => {
                 value={maxLen}
                 onChange={(e) => setMaxLen(e.target.value)}
                 InputProps={{
-                  style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+                  style: { fontSize: isMobile ? '0.95rem' : '1rem' },
                 }}
                 InputLabelProps={{
-                  style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+                  style: { fontSize: isMobile ? '0.95rem' : '1rem' },
                 }}
                 sx={{ mb: 1 }}
               />
@@ -237,10 +237,10 @@ const SignUp = () => {
                 value={shape}
                 onChange={(e) => setShape(e.target.value)}
                 InputProps={{
-                  style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+                  style: { fontSize: isMobile ? '0.95rem' : '1rem' },
                 }}
                 InputLabelProps={{
-                  style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+                  style: { fontSize: isMobile ? '0.95rem' : '1rem' },
                 }}
                 sx={{ mb: 1 }}
               />
@@ -253,7 +253,7 @@ const SignUp = () => {
             fullWidth
             margin="normal"
             inputProps={{
-              style: { fontSize: isMobile ? '0.95rem' : '1rem' }
+              style: { fontSize: isMobile ? '0.95rem' : '1rem' },
             }}
           />
 
@@ -261,10 +261,10 @@ const SignUp = () => {
             <Typography
               color="error"
               variant="body2"
-              sx={{ 
-                mt: 1, 
+              sx={{
+                mt: 1,
                 textAlign: 'center',
-                fontSize: { xs: '0.8rem', sm: '0.875rem' } 
+                fontSize: { xs: '0.8rem', sm: '0.875rem' },
               }}
             >
               {error}
@@ -289,12 +289,12 @@ const SignUp = () => {
             Create Account
           </Button>
 
-          <Typography 
-            variant="body2" 
-            align="center" 
-            sx={{ 
+          <Typography
+            variant="body2"
+            align="center"
+            sx={{
               mt: 3,
-              fontSize: { xs: '0.8rem', sm: '0.875rem' } 
+              fontSize: { xs: '0.8rem', sm: '0.875rem' },
             }}
           >
             Already have an account?{' '}
@@ -308,7 +308,7 @@ const SignUp = () => {
         </Box>
       </Paper>
     </Container>
-  );
-};
+  )
+}
 
-export default SignUp;
+export default SignUp

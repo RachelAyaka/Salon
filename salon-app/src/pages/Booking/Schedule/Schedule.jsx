@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import {
   CircularProgress,
@@ -19,56 +19,56 @@ import {
   useTheme,
   useMediaQuery,
   Alert,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import axiosInstance from '../../../utils/axiosInstance';
-import { formatDuration } from '../../../utils/helper';
-import TimeSlotSelector from './TimeSlotSelector';
-import Calendar from './Calendar';
+} from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EventNoteIcon from '@mui/icons-material/EventNote'
+import axiosInstance from '../../../utils/axiosInstance'
+import { formatDuration } from '../../../utils/helper'
+import TimeSlotSelector from './TimeSlotSelector'
+import Calendar from './Calendar'
 
 const Schedule = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const navigate = useNavigate();
-  const location = useLocation();
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const navigate = useNavigate()
+  const location = useLocation()
   const { selectedServices: initialServices } = location.state || {
     selectedServices: [],
-  };
-  const [selectedServices, setSelectedServices] = useState(initialServices);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedTime, setSelectedTime] = useState('');
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [totalDuration, setTotalDuration] = useState(0);
-  const [note, setNote] = useState("");
+  }
+  const [selectedServices, setSelectedServices] = useState(initialServices)
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [availableSlots, setAvailableSlots] = useState([])
+  const [selectedTime, setSelectedTime] = useState('')
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [totalDuration, setTotalDuration] = useState(0)
+  const [note, setNote] = useState('')
 
-  const steps = ['Select Date', 'Choose Time', 'Confirm & Book'];
+  const steps = ['Select Date', 'Choose Time', 'Confirm & Book']
 
   useEffect(() => {
     if (selectedServices.length === 0) {
-      navigate('/booking');
+      navigate('/booking')
     }
-  }, [selectedServices, navigate]);
+  }, [selectedServices, navigate])
 
   // Get available slots for the selected date
   useEffect(() => {
-    let accumulatedDuration = 0;
-    let accumulatedPrice = 0;
+    let accumulatedDuration = 0
+    let accumulatedPrice = 0
 
     // Loop through selected services to calculate total duration and price
     selectedServices.forEach((service) => {
-      accumulatedDuration += service.duration;
-      accumulatedPrice += service.price;
-    });
+      accumulatedDuration += service.duration
+      accumulatedPrice += service.price
+    })
 
     // Update the state once with the calculated totals
-    setTotalDuration(accumulatedDuration);
-    setTotalPrice(accumulatedPrice);
-    setLoading(true);
+    setTotalDuration(accumulatedDuration)
+    setTotalPrice(accumulatedPrice)
+    setLoading(true)
 
     //makes sure date is in PST
     const options = {
@@ -76,9 +76,9 @@ const Schedule = () => {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
-    };
-    const formattedDate = selectedDate.toLocaleString('en-US', options);
-    const date = formattedDate.split('/').reverse().join('-');
+    }
+    const formattedDate = selectedDate.toLocaleString('en-US', options)
+    const date = formattedDate.split('/').reverse().join('-')
     axiosInstance
       .get(`/available-slots`, {
         params: {
@@ -87,79 +87,85 @@ const Schedule = () => {
         },
       })
       .then((response) => {
-        setAvailableSlots(response.data.slots);
-        setError(null);
+        setAvailableSlots(response.data.slots)
+        setError(null)
       })
       .catch((err) => {
-        setError('Failed to load available slots.');
-        console.error(err);
+        setError('Failed to load available slots.')
+        console.error(err)
       })
       .finally(() => {
-        setLoading(false);
-      });
-  }, [selectedDate, selectedServices]);
+        setLoading(false)
+      })
+  }, [selectedDate, selectedServices])
 
   const handleDeleteService = (serviceId) => {
     setSelectedServices(
-      selectedServices.filter((service) => service._id !== serviceId)
-    );
-  };
-  
+      selectedServices.filter((service) => service._id !== serviceId),
+    )
+  }
+
   const handleBookAppointment = async () => {
     if (!selectedTime) {
-      setError('Please select a time slot');
-      return;
+      setError('Please select a time slot')
+      return
     }
-    
-    let dateString = selectedDate.toLocaleDateString('en-CA');
-    setLoading(true);
+
+    let dateString = selectedDate.toLocaleDateString('en-CA')
+    setLoading(true)
 
     try {
       const response = await axiosInstance.post('/create-appointment', {
-        date: dateString, 
-        time: selectedTime, 
-        services: selectedServices, 
-        note
-      });
+        date: dateString,
+        time: selectedTime,
+        services: selectedServices,
+        note,
+      })
 
       if (response.data && response.data.appointment) {
-        console.log(response.data.appointment);
+        console.log(response.data.appointment)
       }
-      navigate('/appointment');
+      navigate('/appointment')
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
-        setError(error.response.data.message);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message)
       } else {
-        setError('An error occurred while booking your appointment');
+        setError('An error occurred while booking your appointment')
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <Box
-      sx={{ 
-        backgroundColor: '#f8f9fa', 
-        minHeight: '100vh', 
-        paddingY: { xs: 2, md: 4 }
+      sx={{
+        backgroundColor: '#f8f9fa',
+        minHeight: '100vh',
+        paddingY: { xs: 2, md: 4 },
       }}
     >
       <Container maxWidth="lg">
-        <Box sx={{ 
-          marginBottom: { xs: 3, md: 4 },
-          textAlign: 'center' 
-        }}>
-          <Typography 
-            variant={isMobile ? "h4" : "h3"} 
-            color="primary" 
+        <Box
+          sx={{
+            marginBottom: { xs: 3, md: 4 },
+            textAlign: 'center',
+          }}
+        >
+          <Typography
+            variant={isMobile ? 'h4' : 'h3'}
+            color="primary"
             fontWeight="600"
             gutterBottom
           >
             Book Your Appointment
           </Typography>
-          <Typography 
-            variant="body1" 
+          <Typography
+            variant="body1"
             color="text.secondary"
             sx={{ maxWidth: '600px', margin: '0 auto' }}
           >
@@ -168,34 +174,34 @@ const Schedule = () => {
         </Box>
 
         {/* Service Summary Card */}
-        <Card 
+        <Card
           elevation={2}
-          sx={{ 
-            marginBottom: { xs: 3, md: 4 }, 
+          sx={{
+            marginBottom: { xs: 3, md: 4 },
             borderRadius: 2,
-            overflow: 'visible'
+            overflow: 'visible',
           }}
         >
           <CardContent sx={{ padding: { xs: 2, md: 3 } }}>
-            <Typography 
-              variant="h6" 
-              fontWeight="600" 
+            <Typography
+              variant="h6"
+              fontWeight="600"
               sx={{ marginBottom: 2, display: 'flex', alignItems: 'center' }}
             >
               <EventNoteIcon sx={{ marginRight: 1, color: 'primary.main' }} />
               Your Selected Services
             </Typography>
-            
+
             {selectedServices.length === 0 ? (
               <Alert severity="warning">
                 No services selected. Please go back to select a service.
               </Alert>
             ) : (
               <Box>
-                <Accordion 
-                  defaultExpanded 
+                <Accordion
+                  defaultExpanded
                   elevation={0}
-                  sx={{ 
+                  sx={{
                     border: '1px solid',
                     borderColor: 'divider',
                     borderRadius: '8px !important',
@@ -214,26 +220,33 @@ const Schedule = () => {
                     }}
                   >
                     <Grid container spacing={2} alignItems="center">
-                      <Grid size={{xs:6, sm:6}}>
+                      <Grid size={{ xs: 6, sm: 6 }}>
                         <Typography variant="subtitle1" fontWeight="600">
                           {selectedServices.length > 1
                             ? `${selectedServices.length} services`
                             : `${selectedServices[0].serviceName}`}
                         </Typography>
                       </Grid>
-                      <Grid size={{xs:3, sm:3}} sx={{ textAlign: 'center' }}>
+                      <Grid
+                        size={{ xs: 3, sm: 3 }}
+                        sx={{ textAlign: 'center' }}
+                      >
                         <Typography variant="body2" color="text.secondary">
                           {formatDuration(totalDuration)}
                         </Typography>
                       </Grid>
-                      <Grid size={{xs:3, sm:3}}sx={{ textAlign: 'right' }}>
-                        <Typography variant="subtitle1" fontWeight="600" color="primary.main">
+                      <Grid size={{ xs: 3, sm: 3 }} sx={{ textAlign: 'right' }}>
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight="600"
+                          color="primary.main"
+                        >
                           ${totalPrice}
                         </Typography>
                       </Grid>
                     </Grid>
                   </AccordionSummary>
-                  
+
                   {selectedServices.map((service, index) => (
                     <AccordionDetails
                       key={index}
@@ -245,27 +258,32 @@ const Schedule = () => {
                         },
                       }}
                     >
-                      <Grid
-                        container
-                        spacing={2}
-                        alignItems="center"
-                      >
-                        <Grid size={{xs:6, sm:6}}>
+                      <Grid container spacing={2} alignItems="center">
+                        <Grid size={{ xs: 6, sm: 6 }}>
                           <Typography variant="body1">
                             {service.serviceName}
                           </Typography>
                         </Grid>
-                        <Grid size={{xs:2, sm:2}} sx={{ textAlign: 'center' }}>
+                        <Grid
+                          size={{ xs: 2, sm: 2 }}
+                          sx={{ textAlign: 'center' }}
+                        >
                           <Typography variant="body2" color="text.secondary">
                             {formatDuration(service.duration)}
                           </Typography>
                         </Grid>
-                        <Grid size={{xs:2, sm:2}} sx={{ textAlign: 'right' }}>
-                          <Typography variant="body2" >
+                        <Grid
+                          size={{ xs: 2, sm: 2 }}
+                          sx={{ textAlign: 'right' }}
+                        >
+                          <Typography variant="body2">
                             ${service.price}
                           </Typography>
                         </Grid>
-                        <Grid size={{xs:2, sm:2}} sx={{ textAlign: 'right' }}>
+                        <Grid
+                          size={{ xs: 2, sm: 2 }}
+                          sx={{ textAlign: 'right' }}
+                        >
                           <IconButton
                             color="error"
                             onClick={() => handleDeleteService(service._id)}
@@ -289,13 +307,13 @@ const Schedule = () => {
 
         {/* Date and Time Selection */}
         <Grid container spacing={3} sx={{ marginBottom: { xs: 3, md: 4 } }}>
-          <Grid size={{xs:12, md:5}}>
+          <Grid size={{ xs: 12, md: 5 }}>
             <Calendar
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
             />
           </Grid>
-          <Grid size={{xs:12, md:7}}>
+          <Grid size={{ xs: 12, md: 7 }}>
             <TimeSlotSelector
               slots={availableSlots}
               selectedTime={selectedTime}
@@ -307,7 +325,7 @@ const Schedule = () => {
 
         {/* Notes and Book Button */}
         <Grid container spacing={3}>
-          <Grid size={{xs:12, md:8}}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <TextField
               label="Notes (optional)"
               value={note}
@@ -317,15 +335,18 @@ const Schedule = () => {
               rows={4}
               fullWidth
               variant="outlined"
-              sx={{ 
+              sx={{
                 borderRadius: 1,
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
-                }
+                },
               }}
             />
           </Grid>
-          <Grid size={{xs:12, md:4}} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Grid
+            size={{ xs: 12, md: 4 }}
+            sx={{ display: 'flex', flexDirection: 'column' }}
+          >
             <Button
               variant="contained"
               size="large"
@@ -347,13 +368,13 @@ const Schedule = () => {
                 'Confirm Booking'
               )}
             </Button>
-            
+
             {error && (
               <Alert severity="error" sx={{ marginBottom: 2 }}>
                 {error}
               </Alert>
             )}
-            
+
             <Paper elevation={1} sx={{ padding: 2, borderRadius: 2 }}>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 Appointment Summary:
@@ -375,7 +396,7 @@ const Schedule = () => {
         </Grid>
       </Container>
     </Box>
-  );
-};
+  )
+}
 
-export default Schedule;
+export default Schedule

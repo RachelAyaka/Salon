@@ -117,29 +117,29 @@ const Booking = () => {
   const isAdmin = userInfo && userInfo.email === 'rachellin117@gmail.com'
 
   return (
-    <Container 
-      maxWidth="lg" 
-      sx={{ 
+    <Container
+      maxWidth="lg"
+      sx={{
         py: { xs: 4, md: 8 },
-        px: { xs: 2, sm: 3, md: 4 }
+        px: { xs: 2, sm: 3, md: 4 },
       }}
     >
-      <Box 
-        sx={{ 
+      <Box
+        sx={{
           backgroundImage: `linear-gradient(135deg, ${theme.palette.primary.light} 0%,  #fdfcfb 100%)`,
           borderRadius: 4,
           p: { xs: 3, md: 5 },
           mb: 4,
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
-        <Typography 
-          variant="h3" 
-          component="h1" 
-          gutterBottom 
-          sx={{ 
+        <Typography
+          variant="h3"
+          component="h1"
+          gutterBottom
+          sx={{
             fontWeight: 'bold',
-            fontSize: { xs: '2rem', md: '3rem' }
+            fontSize: { xs: '2rem', md: '3rem' },
           }}
         >
           Our Services
@@ -149,11 +149,11 @@ const Booking = () => {
       <Grid container spacing={3} justifyContent="left">
         {services.map((service) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={service._id}>
-              {/* size={{ xs: 12, sm: 6, md: 4 }}
+            {/* size={{ xs: 12, sm: 6, md: 4 }}
                key={service._id}
               sx={{ display: 'flex' }} */}
 
-            <Card 
+            <Card
               elevation={2}
               sx={{
                 height: '100%',
@@ -164,8 +164,10 @@ const Booking = () => {
                 borderRadius: 2,
                 '&:hover': {
                   transform: 'translateY(-4px)',
-                  boxShadow: 6
-            }}}>
+                  boxShadow: 6,
+                },
+              }}
+            >
               {isAdmin && (
                 <IconButton
                   onClick={() => handleEdit(service)}
@@ -179,20 +181,24 @@ const Booking = () => {
                     height: 36,
                     '&:hover': {
                       bgcolor: 'rgba(255,255,255,0.95)',
-                    }
+                    },
                   }}
                 >
                   <EditIcon fontSize="small" />
                 </IconButton>
               )}
-              
+
               <CardContent sx={{ flexGrow: 1, p: 3 }}>
                 <Box sx={{ mb: 2 }}>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={selectedServices.some(s => s._id === service._id)}
-                        onChange={(e) => handleServiceChange(e, service._id, service)}
+                        checked={selectedServices.some(
+                          (s) => s._id === service._id,
+                        )}
+                        onChange={(e) =>
+                          handleServiceChange(e, service._id, service)
+                        }
                         color="primary"
                         name="serviceCheckbox"
                         id={`checkbox-${service._id}`}
@@ -206,22 +212,45 @@ const Booking = () => {
                   />
                 </Box>
 
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
                   {service.description}
                 </Typography>
-                
+
                 <Divider sx={{ my: 2 }} />
-                
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mt: 2,
+                  }}
+                >
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <PaidIcon sx={{ color: theme.palette.success.main, mr: 1, fontSize: 18 }} />
+                    <PaidIcon
+                      sx={{
+                        color: theme.palette.success.main,
+                        mr: 1,
+                        fontSize: 18,
+                      }}
+                    />
                     <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
                       ${service.price}
                     </Typography>
                   </Box>
-                  
+
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <AccessTimeIcon sx={{ color: theme.palette.info.main, mr: 1, fontSize: 18 }} />
+                    <AccessTimeIcon
+                      sx={{
+                        color: theme.palette.info.main,
+                        mr: 1,
+                        fontSize: 18,
+                      }}
+                    />
                     <Typography variant="body2" color="text.secondary">
                       {formatDuration(service.duration)}
                     </Typography>
@@ -232,12 +261,12 @@ const Booking = () => {
           </Grid>
         ))}
       </Grid>
-      
-      <Box 
-        sx={{ 
-          position: 'sticky', 
-          bottom: 0, 
-          left: 0, 
+
+      <Box
+        sx={{
+          position: 'sticky',
+          bottom: 0,
+          left: 0,
           right: 0,
           bgcolor: 'background.paper',
           pt: 2,
@@ -245,25 +274,31 @@ const Booking = () => {
           mt: 4,
           boxShadow: '0 -4px 10px rgba(0,0,0,0.05)',
           borderRadius: '16px 16px 0 0',
-          zIndex: 10
+          zIndex: 10,
         }}
       >
         <Container maxWidth="lg">
           {selectedServices.length > 0 && (
             <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              {selectedServices.map(service => (
-                <Chip 
+              {selectedServices.map((service) => (
+                <Chip
                   key={service._id}
                   label={service.serviceName}
-                  onDelete={() => handleServiceChange({target: {checked: false}}, service._id, service)}
+                  onDelete={() =>
+                    handleServiceChange(
+                      { target: { checked: false } },
+                      service._id,
+                      service,
+                    )
+                  }
                   color="primary"
                   variant="outlined"
                   size="small"
                 />
               ))}
-            </Box>  
+            </Box>
           )}
-          
+
           <Button
             variant="contained"
             color="primary"
@@ -271,14 +306,16 @@ const Booking = () => {
             size="large"
             onClick={handleContinueClick}
             disabled={selectedServices.length === 0}
-            sx={{ 
+            sx={{
               py: 1.5,
               borderRadius: 2,
               fontSize: '1rem',
-              boxShadow: 4
+              boxShadow: 4,
             }}
           >
-            {selectedServices.length > 0 ? 'Continue to Scheduling' : 'Please Select a Service'}
+            {selectedServices.length > 0
+              ? 'Continue to Scheduling'
+              : 'Please Select a Service'}
           </Button>
         </Container>
       </Box>
@@ -303,7 +340,7 @@ const Booking = () => {
               <AddIcon style={{ fontSize: '32px', color: 'white' }} />
             </Button>
           </Fade>
-          
+
           <Modal
             open={openAddEditModal.isShown}
             onClose={handleCloseModal}

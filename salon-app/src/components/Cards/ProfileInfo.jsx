@@ -16,13 +16,17 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
       >
         {getInitials(userInfo?.fullName)}
       </Avatar>
-        <Button
-          variant="text"
-          onClick={onLogout}
-          sx={{ textTransform: 'none', backgroundColor: 'white',  padding: '4px 8px', }}
-        >
-          Logout
-        </Button>
+      <Button
+        variant="text"
+        onClick={onLogout}
+        sx={{
+          textTransform: 'none',
+          backgroundColor: 'white',
+          padding: '4px 8px',
+        }}
+      >
+        Logout
+      </Button>
     </Box>
   )
 }

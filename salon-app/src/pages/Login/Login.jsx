@@ -1,40 +1,47 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import PasswordInput from '../../components/Input/PasswordInput';
-import { validateEmail } from '../../utils/helper';
-import { TextField, Button, Typography, Box, Container, Paper } from '@mui/material';
-import axiosInstance from '../../utils/axiosInstance';
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import PasswordInput from '../../components/Input/PasswordInput'
+import { validateEmail } from '../../utils/helper'
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Container,
+  Paper,
+} from '@mui/material'
+import axiosInstance from '../../utils/axiosInstance'
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address.');
-      return;
+      setError('Please enter a valid email address.')
+      return
     }
     if (!password) {
-      setError('Please enter the password.');
-      return;
+      setError('Please enter the password.')
+      return
     }
-    setError('');
+    setError('')
 
     // Login API Call
     try {
       const response = await axiosInstance.post('/login', {
         email: email,
         password: password,
-      });
+      })
 
       //handle successful login response
       if (response.data && response.data.accessToken) {
-        localStorage.setItem('token', response.data.accessToken);
-        navigate('/');
+        localStorage.setItem('token', response.data.accessToken)
+        navigate('/')
       }
     } catch (error) {
       //handle login error
@@ -43,24 +50,24 @@ const Login = () => {
         error.response.data &&
         error.response.data.message
       ) {
-        setError(error.response.data.message);
+        setError(error.response.data.message)
       } else {
-        setError('An unexpected error occurred. Please try again.');
+        setError('An unexpected error occurred. Please try again.')
       }
     }
-  };
+  }
 
   return (
-    <Container 
-      component="main" 
-      maxWidth="xs" 
+    <Container
+      component="main"
+      maxWidth="xs"
       sx={{
         display: 'flex',
         flexDirection: 'column',
         minHeight: '80vh',
         justifyContent: 'center',
         py: 4,
-        px: { xs: 2, sm: 3 }
+        px: { xs: 2, sm: 3 },
       }}
     >
       <Paper
@@ -80,20 +87,23 @@ const Login = () => {
             alignItems: 'center',
           }}
         >
-          <Typography variant="h4" sx={{ 
-            fontWeight: 600, 
-            marginBottom: 3,
-            fontSize: { xs: '1.75rem', sm: '2.125rem' }
-          }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 600,
+              marginBottom: 3,
+              fontSize: { xs: '1.75rem', sm: '2.125rem' },
+            }}
+          >
             Login
           </Typography>
-          
-          <Typography 
-            variant="body1" 
-            align="center" 
-            sx={{ 
+
+          <Typography
+            variant="body1"
+            align="center"
+            sx={{
               mb: 3,
-              fontSize: { xs: '0.9rem', sm: '1rem' }
+              fontSize: { xs: '0.9rem', sm: '1rem' },
             }}
           >
             Log in to book an appointment!
@@ -110,7 +120,7 @@ const Login = () => {
             error={!!error && !validateEmail(email)}
             helperText={!!error && !validateEmail(email) ? error : ''}
             InputProps={{
-              style: { fontSize: '0.95rem' }
+              style: { fontSize: '0.95rem' },
             }}
             sx={{ mb: 1 }}
           />
@@ -126,7 +136,11 @@ const Login = () => {
             <Typography
               color="error"
               variant="body2"
-              sx={{ mt: 1, textAlign: 'center', fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
+              sx={{
+                mt: 1,
+                textAlign: 'center',
+                fontSize: { xs: '0.8rem', sm: '0.875rem' },
+              }}
             >
               {error}
             </Typography>
@@ -150,12 +164,12 @@ const Login = () => {
             Login
           </Button>
 
-          <Typography 
-            variant="body2" 
-            align="center" 
-            sx={{ 
+          <Typography
+            variant="body2"
+            align="center"
+            sx={{
               mt: 3,
-              fontSize: { xs: '0.8rem', sm: '0.875rem' }
+              fontSize: { xs: '0.8rem', sm: '0.875rem' },
             }}
           >
             Not registered yet?{' '}
@@ -169,7 +183,7 @@ const Login = () => {
         </Box>
       </Paper>
     </Container>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
