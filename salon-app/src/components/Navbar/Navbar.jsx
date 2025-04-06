@@ -1,116 +1,186 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   AppBar,
   Toolbar,
-  IconButton,
+  Container,
   Box,
-  InputBase,
+  Drawer,
+  IconButton,
   Typography,
   Button,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
-import { Search as SearchIcon, AccountCircle } from '@mui/icons-material'
+import MenuIcon from '@mui/icons-material/Menu'
 import ProfileInfo from '../Cards/ProfileInfo'
+import axiosInstance from '../../utils/axiosInstance'
+import NavDrawer from './NavDrawer'
 
-const Navbar = ({ userInfo }) => {
-  const [searchQuery, setSearchQuery] = useState('')
+const Navbar = () => {
   const navigate = useNavigate()
+  const theme = useTheme()
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [url, setUrl] = useState('')
+  const location = useLocation()
+  const [userInfo, setUserInfo] = useState(null)
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get('/get-user')
+      if (response.data && response.data.user) {
+        setUserInfo(response.data.user)
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear()
+      }
+    }
+  }
 
   const onLogout = () => {
     localStorage.clear()
-    navigate('/login')
+    setUserInfo(null)
+    navigate('/')
+    setMobileOpen(false)
   }
 
-  const handleSearch = () => {
-    // Implement your search functionality here
+  const getTrailingUrl = () => {
+    setUrl(location.pathname.split('/').pop())
+    return
   }
 
-  const onClearSearch = () => {
-    setSearchQuery('')
+  useEffect(() => {
+    getUserInfo()
+    setMobileOpen(false)
+    getTrailingUrl()
+    return () => {}
+  }, [location.pathname])
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen)
   }
 
   return (
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: 'white',
+        backgroundColor: 'primary',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
         borderRadius: '8px',
       }}
+      elevation={0}
     >
-      <Toolbar
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        {/* Left Section: Search Bar */}
-        {/* <Box
-          sx={{
-            flexGrow: 1,
-            display: 'flex',
-            alignItems: 'center',
-            maxWidth: '400px',
-            borderRadius: '50px',
-            overflow: 'hidden',
-            border: '1px solid #ddd',
-          }}
-        >
-          <InputBase
-            sx={{
-              pl: 2,
-              pr: 2,
-              py: 1,
-              fontSize: '16px',
-              flex: 1,
-              color: '#333',
-              '& .MuiInputBase-input': {
-                borderRadius: '50px',
-                backgroundColor: '#f9f9f9',
-              },
-            }}
-            value={searchQuery}
-            onChange={({ target }) => setSearchQuery(target.value)}
-            placeholder="Search Notes"
-            startAdornment={<SearchIcon sx={{ color: '#999' }} />}
-          />
-          {searchQuery && (
-            <IconButton
-              sx={{ padding: '8px', color: '#999' }}
-              onClick={onClearSearch}
-            >
-              <SearchIcon
-                sx={{ transform: 'rotate(180deg)', fontSize: '18px' }}
-              />
-            </IconButton>
-          )}
-        </Box> */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: 'flex',
-            alignItems: 'center',
-            maxWidth: '400px',
-            overflow: 'hidden',
-          }}
-        >
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Vite App
+      <Container maxWidth="lg">
+        <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{ flexGrow: 1 }}
+            style={{ fontFamily: 'Alex Brush, cursive' }}
+          >
+            Aya's Lash
           </Typography>
-          <Button component={Link} to="/" color="primary">
-            Home
-          </Button>
-          <Button component={Link} to="/appointment" color="primary">
-            Appointment
-          </Button>
-        </Box>
+          <Box
+            sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}
+          >
+            <Button
+              component={Link}
+              to="/"
+              color="inherit"
+              sx={{
+                padding: '8px 8px',
+                marginRight: 2,
+                backgroundColor: theme.palette.background.default,
+                ':hover': {
+                  backgroundColor: theme.palette.primary.dark,
+                  boxShadow: '0px 8px 12px rgba(0, 0, 0, 0.3)',
+                },
+              }}
+            >
+              Home
+            </Button>
+            <Button
+              component={Link}
+              to="/policy"
+              color="inherit"
+              sx={{
+                padding: '8px 8px',
+                marginRight: 2,
+                backgroundColor: theme.palette.background.default,
+                ':hover': {
+                  backgroundColor: theme.palette.primary.dark,
+                  boxShadow: '0px 8px 12px rgba(0, 0, 0, 0.3)',
+                },
+              }}
+            >
+              Policy
+            </Button>
 
-        {/* Right Section: Profile and Logout */}
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-        </Box>
-      </Toolbar>
+            {userInfo ? (
+              <>
+                <Button
+                  component={Link}
+                  to="/appointment"
+                  color="inherit"
+                  sx={{
+                    padding: '8px 8px',
+                    marginRight: 2,
+                    backgroundColor: theme.palette.background.default,
+                    ':hover': {
+                      backgroundColor: theme.palette.primary.dark,
+                      boxShadow: '0px 8px 12px rgba(0, 0, 0, 0.3)',
+                    },
+                  }}
+                >
+                  My Appointments
+                </Button>
+                <Box sx={{ ml: 2, display: 'flex', alignItems: 'center' }}>
+                  <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+                </Box>
+              </>
+            ) : (
+              <Box sx={{ display: 'flex' }}>
+                <Button
+                  component={Link}
+                  to="/login"
+                  variant="contained"
+                  color="secondary"
+                  sx={{ ml: 1 }}
+                >
+                  Login
+                </Button>
+                <Button
+                  component={Link}
+                  to="/signup"
+                  variant="contained"
+                  color="secondary"
+                  sx={{ ml: 1 }}
+                >
+                  Sign Up
+                </Button>
+              </Box>
+            )}
+          </Box>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ display: { md: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </Container>
+      <NavDrawer
+        mobileOpen={mobileOpen}
+        handleDrawerToggle={handleDrawerToggle}
+        userInfo={userInfo}
+        location={location}
+        onLogout={onLogout}
+      />
     </AppBar>
   )
 }

@@ -4,7 +4,6 @@ export const validateEmail = (email) => {
 }
 
 export const validatePhone = (phone) => {
-  console.log(phone)
   const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
   return regex.test(phone)
 }
@@ -20,4 +19,17 @@ export const getInitials = (name) => {
   }
 
   return initials.toUpperCase()
+}
+
+export const formatDuration = (minutes) => {
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+
+  if (hours > 0 && mins > 0) {
+    return `${hours}hr ${mins}min`
+  } else if (hours > 0) {
+    return `${hours}hr`
+  } else {
+    return `${mins}min`
+  }
 }
