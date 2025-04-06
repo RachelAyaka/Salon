@@ -1,5 +1,5 @@
-import React from 'react'
-import { Box, Button, Grid, Typography, CircularProgress } from '@mui/material'
+import { Box, Button, Grid, Typography, CircularProgress, Paper, useTheme, useMediaQuery } from '@mui/material';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const TimeSlotSelector = ({
   slots,
@@ -7,66 +7,118 @@ const TimeSlotSelector = ({
   setSelectedTime,
   loading,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
   return (
-    <Box sx={{ padding: 2, textAlign: 'center' }}>
-      <Typography variant="h6" gutterBottom>
-        Select a Time Slot
-      </Typography>
-      <Typography variant="h8" gutterBottom>
-        Times are shown in PDT
+    <Paper 
+      elevation={3}
+      sx={{ 
+        padding: { xs: 2, md: 3 }, 
+        borderRadius: 3,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '100%',
+        overflow: 'hidden'
+      }}
+    >
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        marginBottom: 2 
+      }}>
+        <AccessTimeIcon sx={{ color: 'primary.main', marginRight: 1 }} />
+        <Typography variant="h6" fontWeight="600">
+          Select a Time
+        </Typography>
+      </Box>
+      
+      <Typography 
+        variant="body2" 
+        color="text.secondary" 
+        sx={{ marginBottom: 3, textAlign: 'center' }}
+      >
+        All times shown in PDT
       </Typography>
 
       {loading ? (
-        // Show loading spinner while slots are being fetched
-        <CircularProgress size={50} sx={{ color: '#1976d2' }} />
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+          <CircularProgress size={40} thickness={4} />
+        </Box>
       ) : slots.length === 0 ? (
-        // Show "Go to Next Available Date" if no slots are available
-        <Typography
-          variant="contained"
-          color="black"
-          fullWidth
-          sx={{
-            padding: '10px',
-            backgroundColor: '#b0bec5', // Light gray for unavailable state
-            '&:hover': {
-              backgroundColor: '#78909c', // Slightly darker gray on hover
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            backgroundColor: 'grey.100',
+            borderRadius: 2,
+            padding: 3,
+            flex: 1
+          }}
+        >
+          <Typography 
+            variant="subtitle1" 
+            color="text.secondary"
+            align="center"
+          >
+            No time slots available for this date.
+            Please select another date.
+          </Typography>
+        </Box>
+      ) : (
+        <Box 
+          sx={{ 
+            overflowY: 'auto', 
+            maxHeight: { xs: '300px', md: '350px' },
+            paddingRight: 1,
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'rgba(0,0,0,0.2)',
+              borderRadius: 4,
             },
           }}
         >
-          No Available Time Slot Left
-        </Typography>
-      ) : (
-        // Show time slots if available
-        <Grid container spacing={2} justifyContent="left">
-          {slots.map((slot, index) => (
-            <Grid size={{ xs: 6, sm: 4, md: 3 }} key={index}>
-              <Button
-                variant="outlined"
-                fullWidth
-                sx={{
-                  padding: '12px',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  borderColor: '#1976d2', // Blue border
-                  color: selectedTime === slot ? 'white' : 'text.primary',
-                  backgroundColor:
-                    selectedTime === slot ? '#1976d2' : 'transparent',
-                  '&:hover': {
-                    borderColor: '#1565c0', // Darker blue on hover
-                    backgroundColor:
-                      selectedTime === slot ? '#1565c0' : '#e3f2fd',
-                  },
-                }}
-                onClick={() => setSelectedTime(slot)}
-              >
-                {slot}
-              </Button>
-            </Grid>
-          ))}
-        </Grid>
+          <Grid 
+            container 
+            spacing={2} 
+            sx={{ 
+              justifyContent: { xs: 'center', sm: 'flex-start' }
+            }}
+          >
+            {slots.map((slot, index) => (
+              <Grid size={{xs:6, sm:4, md:4}} key={index}>
+                <Button
+                  variant={selectedTime === slot ? "contained" : "outlined"}
+                  fullWidth
+                  sx={{
+                    padding: { xs: '10px 6px', md: '12px' },
+                    fontWeight: 500,
+                    fontSize: { xs: '14px', md: '16px' },
+                    borderRadius: '10px',
+                    transition: 'all 0.2s',
+                    borderColor: selectedTime === slot ? 'primary.main' : 'grey.300',
+                    color: 'black',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: selectedTime === slot ? 4 : 1,
+                    },
+                  }}
+                  onClick={() => setSelectedTime(slot)}
+                >
+                  {slot}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       )}
-    </Box>
-  )
-}
+    </Paper>
+  );
+};
 
-export default TimeSlotSelector
+export default TimeSlotSelector;

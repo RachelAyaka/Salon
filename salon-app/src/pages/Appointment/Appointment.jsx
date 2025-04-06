@@ -277,7 +277,6 @@ const Appointment = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo}/>
       <Container maxWidth="lg" disableGutters={isMobile}>
         <Box sx={{ 
           p: isMobile ? 2 : 3,
