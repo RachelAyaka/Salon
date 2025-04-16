@@ -1,34 +1,38 @@
-import { Box, TextField, Button, Typography, Alert } from '@mui/material';
-import useContactForm from '../hooks/useContactForm';
+import { Box, TextField, Button, Typography, Alert } from '@mui/material'
+import useContactForm from '../hooks/useContactForm'
 
 export default function ContactForm() {
-    const {
-        name,
-        email,
-        phone,
-        message,
-        status,
-        nameStatus,
-        emailStatus,
-        phoneStatus,
-        messageStatus,
-        handleNameFieldChange,
-        handleEmailFieldChange,
-        handlePhoneFieldChange,
-        handleMessageFieldChange,
-        handleSubmit,
-        nameHasError,
-        emailHasError,
-        phoneHasError,
-        messageHasError,
-        setName,
-        setEmail,
-        setPhone,
-        setMessage,
-    } = useContactForm()
+  const {
+    name,
+    email,
+    phone,
+    message,
+    status,
+    nameStatus,
+    emailStatus,
+    phoneStatus,
+    messageStatus,
+    handleNameFieldChange,
+    handleEmailFieldChange,
+    handlePhoneFieldChange,
+    handleMessageFieldChange,
+    handleSubmit,
+    nameHasError,
+    emailHasError,
+    phoneHasError,
+    messageHasError,
+    setName,
+    setEmail,
+    setPhone,
+    setMessage,
+  } = useContactForm()
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mx: 'auto', mt: 4, p: 3 }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ maxWidth: 600, mx: 'auto', mt: 4, p: 3 }}
+    >
       <Typography variant="h5" gutterBottom>
         Get in touch with us!
       </Typography>
@@ -42,9 +46,9 @@ export default function ContactForm() {
         value={name}
         error={nameHasError()}
         helperText={nameHasError() && nameStatus.errorMessage}
-        onChange={(event)=> {
-            handleNameFieldChange()
-            setName(event.target.value)
+        onChange={(event) => {
+          handleNameFieldChange()
+          setName(event.target.value)
         }}
         margin="normal"
       />
@@ -58,9 +62,9 @@ export default function ContactForm() {
         value={email}
         error={emailHasError()}
         helperText={emailHasError() && emailStatus.errorMessage}
-        onChange={(event)=> {
-            handleEmailFieldChange()
-            setEmail(event.target.value)
+        onChange={(event) => {
+          handleEmailFieldChange()
+          setEmail(event.target.value)
         }}
         margin="normal"
       />
@@ -74,9 +78,9 @@ export default function ContactForm() {
         value={phone}
         error={phoneHasError()}
         helperText={phoneHasError() && phoneStatus.errorMessage}
-        onChange={(event)=> {
-            handlePhoneFieldChange()
-            setPhone(event.target.value)
+        onChange={(event) => {
+          handlePhoneFieldChange()
+          setPhone(event.target.value)
         }}
         margin="normal"
       />
@@ -91,9 +95,9 @@ export default function ContactForm() {
         value={message}
         error={messageHasError()}
         helperText={messageHasError() && messageStatus.errorMessage}
-        onChange={(event)=> {
-            handleMessageFieldChange()
-            setMessage(event.target.value)
+        onChange={(event) => {
+          handleMessageFieldChange()
+          setMessage(event.target.value)
         }}
         margin="normal"
       />
@@ -117,5 +121,5 @@ export default function ContactForm() {
         </Alert>
       )}
     </Box>
-  );
+  )
 }

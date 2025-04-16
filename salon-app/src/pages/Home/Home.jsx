@@ -228,7 +228,7 @@ const Home = () => {
           </Button>
         </Box>
 
-        <ContactForm/>
+        <ContactForm />
         {/* <NewsletterForm/> */}
       </Container>
     </Box>

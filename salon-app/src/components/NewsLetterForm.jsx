@@ -1,47 +1,54 @@
 // components/NewsletterForm.jsx
-import { useState } from 'react';
-import { Box, TextField, Button, Typography, Alert } from '@mui/material';
-import axiosInstance from '../utils/axiosInstance';
+import { useState } from 'react'
+import { Box, TextField, Button, Typography, Alert } from '@mui/material'
+import axiosInstance from '../utils/axiosInstance'
 
 export default function NewsletterForm() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('')
   const [status, setStatus] = useState({
     submitted: false,
     submitting: false,
-    info: { error: false, msg: null }
-  });
+    info: { error: false, msg: null },
+  })
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus({ submitted: false, submitting: true, info: { error: false, msg: null } });
+    e.preventDefault()
+    setStatus({
+      submitted: false,
+      submitting: true,
+      info: { error: false, msg: null },
+    })
 
     try {
-      const response =  await axiosInstance.get('/subscribe', email);
+      const response = await axiosInstance.get('/subscribe', email)
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok) {
         setStatus({
           submitted: true,
           submitting: false,
-          info: { error: false, msg: 'Subscription successful!' }
-        });
-        setEmail('');
+          info: { error: false, msg: 'Subscription successful!' },
+        })
+        setEmail('')
       } else {
         setStatus({
           submitted: false,
           submitting: false,
-          info: { error: true, msg: data.message || 'An error occurred. Please try again.' }
-        });
+          info: {
+            error: true,
+            msg: data.message || 'An error occurred. Please try again.',
+          },
+        })
       }
     } catch (error) {
       setStatus({
         submitted: false,
         submitting: false,
-        info: { error: true, msg: 'An error occurred. Please try again.' }
-      });
+        info: { error: true, msg: 'An error occurred. Please try again.' },
+      })
     }
-  };
+  }
 
   return (
     <Box
@@ -88,5 +95,5 @@ export default function NewsletterForm() {
         </Alert>
       )}
     </Box>
-  );
+  )
 }
