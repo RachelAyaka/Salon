@@ -11,6 +11,8 @@ import {
 } from '@mui/material'
 import { Link } from 'react-router-dom'
 import axiosInstance from '../../utils/axiosInstance'
+import ContactForm from '../../components/ContactForm'
+import NewsletterForm from '../../components/NewsLetterForm'
 
 const Home = () => {
   const [services, setServices] = useState([])
@@ -199,7 +201,6 @@ const Home = () => {
           </Grid>
         </Box>
 
-        {/* Call to Action */}
         <Box
           sx={{
             bgcolor: 'primary.light',
@@ -226,6 +227,9 @@ const Home = () => {
             Book Now
           </Button>
         </Box>
+
+        <ContactForm/>
+        {/* <NewsletterForm/> */}
       </Container>
     </Box>
   )
